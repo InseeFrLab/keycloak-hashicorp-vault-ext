@@ -1,5 +1,8 @@
 package fr.insee.vault;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class VaultStatus {
 	private boolean initialized;
 	private boolean sealed;
