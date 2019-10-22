@@ -41,11 +41,7 @@
       <artifactId>resteasy-jaxrs</artifactId>
       <version>3.0.26.Final</version>
     </dependency>
-	<dependency>
-      <groupId>com.squareup.okhttp3</groupId>
-      <artifactId>okhttp</artifactId>
-      <version>4.2.2</version>
-	</dependency>
+
 	<dependency>
     <groupId>com.fasterxml.jackson.core</groupId>
     <artifactId>jackson-core</artifactId>

@@ -20,7 +20,14 @@ public class HashicorpVaultProviderFactory implements VaultProviderFactory {
 
    @Override
    public VaultProvider create(KeycloakSession session) {
-      return new HashicorpVaultProvider(vaultUrl, vaultToken,  session.getContext().getRealm().getName());
+      VaultService service = new VaultService(session);
+      if(!service.isVaultAvailable(vaultUrl, vaultToken)){
+         logger.error("Vault unavailable : "+ vaultUrl);
+         throw new VaultNotFoundException("Vault unavailable : "+ vaultUrl);
+      }else{
+         logger.info("Vault available : "+ vaultUrl);
+      }
+      return new HashicorpVaultProvider(vaultUrl, vaultToken,  session.getContext().getRealm().getName(), service);
 
    }
 
@@ -28,10 +35,7 @@ public class HashicorpVaultProviderFactory implements VaultProviderFactory {
    public void init(Scope config) {
       vaultToken = config.get("token");
       vaultUrl = config.get("url");
-      if(!VaultService.isVaultAvailable(vaultUrl, vaultToken)){
-         throw new VaultNotFoundException("Vault unavailable : "+ vaultUrl);
-      }
-
+      logger.info("Init Hashicorp: "+ vaultUrl);
    }
 
    @Override
