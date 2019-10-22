@@ -6,8 +6,10 @@ import java.nio.charset.StandardCharsets;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.jboss.logging.Logger;
 import org.keycloak.broker.provider.util.SimpleHttp;
 import org.keycloak.models.KeycloakSession;
 
@@ -18,11 +20,18 @@ import org.keycloak.models.KeycloakSession;
 public class VaultService {
 
 	private KeycloakSession session;
+	private static final Logger logger = Logger.getLogger(VaultService.class);
 	
 
-	public ByteBuffer getSecretFromVault(String vaultUrl, String secretPath, String vaultToken) {
-		// TODO: Implémenter la récupération depuis vault
-		return ByteBuffer.allocate(100).put("secret".getBytes(StandardCharsets.UTF_8));
+	public ByteBuffer getSecretFromVault(String vaultUrl, String realm, String secretName, String vaultToken) {
+		try {
+			JsonNode node = SimpleHttp.doGet(vaultUrl + "v1/secret/data/" + realm, session).header("X-Vault-Token", vaultToken).asJson();
+		   byte[] secretBytes = node.get("data").get("data").get(secretName).textValue().getBytes(StandardCharsets.UTF_8);
+			return ByteBuffer.wrap(secretBytes);
+		} catch (IOException e) {
+			logger.error("IOexception");
+			return null;
+		}
 	}
 
 	public  String get(String url) throws IOException {
