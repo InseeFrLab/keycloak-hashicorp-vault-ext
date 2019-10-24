@@ -20,6 +20,7 @@ public class HashicorpVaultProvider implements VaultProvider {
    private String vaultUrl;
    private String vaultToken;
    private String realmName;
+   private String vaultSecretEngineName;
    private VaultService service;
 
    
@@ -28,7 +29,7 @@ public class HashicorpVaultProvider implements VaultProvider {
    public VaultRawSecret obtainSecret(String vaultSecretId) {
      return DefaultVaultRawSecret.forBuffer(
          Optional.of(
-            service.getSecretFromVault(vaultUrl, realmName, vaultSecretId, vaultToken)));
+            service.getSecretFromVault(vaultUrl, realmName, vaultSecretEngineName, vaultSecretId, vaultToken)));
       
    }
 
@@ -36,10 +37,11 @@ public class HashicorpVaultProvider implements VaultProvider {
    public void close() {
    }
 
-   public HashicorpVaultProvider(String vaultUrl, String vaultToken, String realmName, VaultService service) {
+   public HashicorpVaultProvider(String vaultUrl, String vaultToken, String realmName, String vaultSecretEngineName, VaultService service) {
       this.vaultUrl = vaultUrl;
       this.vaultToken = vaultToken;
       this.realmName = realmName;
+      this.vaultSecretEngineName = vaultSecretEngineName;
       this.service = service;
    }
 
