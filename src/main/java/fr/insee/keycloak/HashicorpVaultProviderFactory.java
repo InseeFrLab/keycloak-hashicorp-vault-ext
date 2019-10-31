@@ -36,10 +36,7 @@ public class HashicorpVaultProviderFactory implements VaultProviderFactory {
    public void init(Scope config) {
       vaultToken = config.get("token");
       vaultUrl = config.get("url");
-      vaultSecretEngineName = "secret";
-      if (config.getBoolean("engine-name")){
-    	  vaultSecretEngineName = config.get("engine-name");
-      }
+      vaultSecretEngineName = config.get("engine-name");
       logger.info("Init Hashicorp: "+ vaultUrl);
    }
 
