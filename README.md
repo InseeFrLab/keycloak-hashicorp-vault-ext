@@ -11,13 +11,8 @@
         <properties>
             <property name="token" value="token"/>
             <property name="url" value="https://vault-url/"/>
+            <property name="engine-name" value="secret"/>
         </properties>
     </provider>
 </spi>
 ```
-
-optional property :
-```xml
-<property name="engine-name" value="token"/>
-```
-
