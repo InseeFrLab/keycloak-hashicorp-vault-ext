@@ -1,12 +1,7 @@
 package fr.insee.keycloak;
 
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
-import org.jboss.logging.Logger;
-import org.keycloak.vault.DefaultVaultCharSecret;
 import org.keycloak.vault.DefaultVaultRawSecret;
 import org.keycloak.vault.VaultProvider;
 import org.keycloak.vault.VaultRawSecret;
