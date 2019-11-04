@@ -31,10 +31,20 @@ public class HashicorpVaultProviderFactory implements VaultProviderFactory {
 
    }
 
+   private static String format(String url) {
+	   if (!(url.charAt(url.length() - 1) == '/')) {
+		   return url.concat("/");
+	   }
+	   else {
+		   return url;
+	   }
+   }
+  
+
    @Override
    public void init(Scope config) {
       vaultToken = config.get("token");
-      vaultUrl = config.get("url");
+      vaultUrl = format(config.get("url"));
       logger.info("Init Hashicorp: "+ vaultUrl);
    }
 
