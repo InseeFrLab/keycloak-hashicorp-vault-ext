@@ -22,12 +22,10 @@ public class VaultService {
 		this.session = session;
 	}
 	
-	public ByteBuffer getSecretFromVault(String vaultUrl, String realm, String secretName, String vaultToken) {
+	public ByteBuffer getSecretFromVault(String vaultUrl, String realm, String vaultSecretEngineName, String secretName, String vaultToken) {
 		try {
-			JsonNode node = SimpleHttp.doGet(vaultUrl + "v1/secret/data/" + realm, session)
-					.header("X-Vault-Token", vaultToken).asJson();
-			byte[] secretBytes = node.get("data").get("data").get(secretName).textValue()
-					.getBytes(StandardCharsets.UTF_8);
+			JsonNode node = SimpleHttp.doGet(vaultUrl + "v1/" + vaultSecretEngineName + "/data/" + realm, session).header("X-Vault-Token", vaultToken).asJson();
+		   byte[] secretBytes = node.get("data").get("data").get(secretName).textValue().getBytes(StandardCharsets.UTF_8);
 			return ByteBuffer.wrap(secretBytes);
 		} catch (IOException e) {
 			logger.error("secret not available", e);

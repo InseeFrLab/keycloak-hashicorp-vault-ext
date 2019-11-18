@@ -17,6 +17,7 @@ public class HashicorpVaultProviderFactory implements VaultProviderFactory {
 
    private String vaultToken;
    private String vaultUrl;
+   private String vaultSecretEngineName;
 
    @Override
    public VaultProvider create(KeycloakSession session) {
@@ -27,7 +28,7 @@ public class HashicorpVaultProviderFactory implements VaultProviderFactory {
       }else{
          logger.info("Vault available : "+ vaultUrl);
       }
-      return new HashicorpVaultProvider(vaultUrl, vaultToken,  session.getContext().getRealm().getName(), service);
+      return new HashicorpVaultProvider(vaultUrl, vaultToken, session.getContext().getRealm().getName(), vaultSecretEngineName, service);
 
    }
 
@@ -45,6 +46,7 @@ public class HashicorpVaultProviderFactory implements VaultProviderFactory {
    public void init(Scope config) {
       vaultToken = config.get("token");
       vaultUrl = format(config.get("url"));
+      vaultSecretEngineName = config.get("engine-name");
       logger.info("Init Hashicorp: "+ vaultUrl);
    }
 
