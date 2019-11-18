@@ -11,6 +11,7 @@
         <properties>
             <property name="token" value="token"/>
             <property name="url" value="https://vault-url/"/>
+            <property name="engine-name" value="secret"/>
         </properties>
     </provider>
 </spi>
