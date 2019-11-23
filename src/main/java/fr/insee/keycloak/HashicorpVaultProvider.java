@@ -22,10 +22,19 @@ public class HashicorpVaultProvider implements VaultProvider {
 
    @Override
    public VaultRawSecret obtainSecret(String vaultSecretId) {
+      String vaultSecretName;
+      String vaultSecretVersion;
+      if (vaultSecretId.contains(":")){
+         vaultSecretName = vaultSecretId.split(":")[0];
+         vaultSecretVersion = vaultSecretId.split(":")[1];
+      }
+      else {
+         vaultSecretName = vaultSecretId;
+         vaultSecretVersion = "0";
+      }
      return DefaultVaultRawSecret.forBuffer(
          Optional.of(
-            service.getSecretFromVault(vaultUrl, realmName, vaultSecretEngineName, vaultSecretId, vaultToken)));
-      
+            service.getSecretFromVault(vaultUrl, realmName, vaultSecretEngineName, vaultSecretName, vaultToken, vaultSecretVersion)));
    }
 
    @Override
