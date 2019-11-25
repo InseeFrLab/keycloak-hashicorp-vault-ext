@@ -24,7 +24,9 @@ public class VaultService {
 	
 	public ByteBuffer getSecretFromVault(String vaultUrl, String realm, String vaultSecretEngineName, String secretName, String vaultToken, String secretVersion) {
 		try {
-			JsonNode node = SimpleHttp.doGet(vaultUrl + "v1/" + vaultSecretEngineName + "/data/" + realm, session).param("version", secretVersion).header("X-Vault-Token", vaultToken).asJson();
+			JsonNode node = SimpleHttp.doGet(vaultUrl + "v1/" + vaultSecretEngineName + "/data/" + realm+ "?version=" +secretVersion, session)
+			.header("X-Vault-Token", vaultToken)
+			.asJson();
 		   byte[] secretBytes = node.get("data").get("data").get(secretName).textValue().getBytes(StandardCharsets.UTF_8);
 			return ByteBuffer.wrap(secretBytes);
 		} catch (IOException e) {
