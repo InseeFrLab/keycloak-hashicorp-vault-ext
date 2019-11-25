@@ -7,6 +7,7 @@ import org.keycloak.vault.VaultProvider;
 import org.keycloak.vault.VaultRawSecret;
 
 import fr.insee.vault.VaultService;
+import org.jboss.logging.Logger;
 
 /**
  * HashicorpVaultProviderFactory
@@ -18,18 +19,21 @@ public class HashicorpVaultProvider implements VaultProvider {
    private String vaultSecretEngineName;
    private VaultService service;
 
-   
-
    @Override
    public VaultRawSecret obtainSecret(String vaultSecretId) {
-      String vaultSecretName;
+      String[] vaultSecretComponent = vaultSecretId.split(":");
+      int nbComponent = vaultSecretComponent.length;
+      String vaultSecretName = "";
       String vaultSecretVersion;
-      if (vaultSecretId.contains(":")){
-         vaultSecretName = vaultSecretId.split(":")[0];
-         vaultSecretVersion = vaultSecretId.split(":")[1];
+      if (nbComponent > 0 && vaultSecretComponent[nbComponent - 1].matches("[0-9]+")){
+         vaultSecretName = vaultSecretName.concat(vaultSecretComponent[0]);
+         for (int i = 1 ; i < nbComponent - 1 ; i++){
+            vaultSecretName = vaultSecretName.concat(":").concat(vaultSecretComponent[i]);
+         }
+         vaultSecretVersion = vaultSecretComponent[nbComponent - 1];
       }
       else {
-         vaultSecretName = vaultSecretId;
+         vaultSecretName = vaultSecretName.concat(vaultSecretId);
          vaultSecretVersion = "0";
       }
      return DefaultVaultRawSecret.forBuffer(
