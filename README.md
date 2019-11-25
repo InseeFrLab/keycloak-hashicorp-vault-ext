@@ -16,3 +16,5 @@
     </provider>
 </spi>
 ```
+
+To choose the K/V2 key version to use in keycloak, add :your_version to the key label (example : ${vault.master:3}). By default, the last version will be used.
