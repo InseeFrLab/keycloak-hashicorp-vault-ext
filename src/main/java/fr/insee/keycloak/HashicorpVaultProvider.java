@@ -27,7 +27,7 @@ public class HashicorpVaultProvider implements VaultProvider {
       String vaultSecretName = vaultSecretId;
       if (vaultSecretId.contains(":")) {
          try {
-            secretVersion = Integer.parseInt(vaultSecretId.substring(vaultSecretId.lastIndexOf(":")));
+            secretVersion = Integer.parseInt(vaultSecretId.substring(vaultSecretId.lastIndexOf(":") + 1));
             vaultSecretName = vaultSecretId.substring(0, vaultSecretId.lastIndexOf(":"));
          } catch (NumberFormatException e) {
             logger.error("last string after : is expected to be the version number");
