@@ -22,7 +22,7 @@ public class VaultService {
 		this.session = session;
 	}
 	
-	public ByteBuffer getSecretFromVault(String vaultUrl, String realm, String vaultSecretEngineName, String secretName, String vaultToken, String secretVersion) {
+	public ByteBuffer getSecretFromVault(String vaultUrl, String realm, String vaultSecretEngineName, String secretName, String vaultToken, int secretVersion) {
 		try {
 			JsonNode node = SimpleHttp.doGet(vaultUrl + "v1/" + vaultSecretEngineName + "/data/" + realm+ "?version=" +secretVersion, session)
 			.header("X-Vault-Token", vaultToken)

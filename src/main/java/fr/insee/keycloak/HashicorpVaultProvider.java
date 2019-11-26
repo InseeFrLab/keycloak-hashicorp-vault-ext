@@ -2,17 +2,19 @@ package fr.insee.keycloak;
 
 import java.util.Optional;
 
+import org.jboss.logging.Logger;
 import org.keycloak.vault.DefaultVaultRawSecret;
 import org.keycloak.vault.VaultProvider;
 import org.keycloak.vault.VaultRawSecret;
 
 import fr.insee.vault.VaultService;
-import org.jboss.logging.Logger;
 
 /**
  * HashicorpVaultProviderFactory
  */
 public class HashicorpVaultProvider implements VaultProvider {
+   private static final Logger logger = Logger.getLogger(HashicorpVaultProviderFactory.class);
+
    private String vaultUrl;
    private String vaultToken;
    private String realmName;
@@ -21,24 +23,20 @@ public class HashicorpVaultProvider implements VaultProvider {
 
    @Override
    public VaultRawSecret obtainSecret(String vaultSecretId) {
-      String[] vaultSecretComponent = vaultSecretId.split(":");
-      int nbComponent = vaultSecretComponent.length;
-      String vaultSecretName = "";
-      String vaultSecretVersion;
-      if (nbComponent > 0 && vaultSecretComponent[nbComponent - 1].matches("[0-9]+")){
-         vaultSecretName = vaultSecretName.concat(vaultSecretComponent[0]);
-         for (int i = 1 ; i < nbComponent - 1 ; i++){
-            vaultSecretName = vaultSecretName.concat(":").concat(vaultSecretComponent[i]);
+      int secretVersion = 0;
+      String vaultSecretName = vaultSecretId;
+      if (vaultSecretId.contains(":")) {
+         try {
+            secretVersion = Integer.parseInt(vaultSecretId.substring(vaultSecretId.lastIndexOf(":")));
+            vaultSecretName = vaultSecretId.substring(0, vaultSecretId.lastIndexOf(":"));
+         } catch (NumberFormatException e) {
+            logger.error("last string after : is expected to be the version number");
          }
-         vaultSecretVersion = vaultSecretComponent[nbComponent - 1];
       }
-      else {
-         vaultSecretName = vaultSecretName.concat(vaultSecretId);
-         vaultSecretVersion = "0";
-      }
+
      return DefaultVaultRawSecret.forBuffer(
          Optional.of(
-            service.getSecretFromVault(vaultUrl, realmName, vaultSecretEngineName, vaultSecretName, vaultToken, vaultSecretVersion)));
+            service.getSecretFromVault(vaultUrl, realmName, vaultSecretEngineName, vaultSecretName, vaultToken, secretVersion)));
    }
 
    @Override
