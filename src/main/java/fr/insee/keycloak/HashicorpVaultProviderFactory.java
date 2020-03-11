@@ -44,7 +44,11 @@ public class HashicorpVaultProviderFactory implements VaultProviderFactory {
 
    @Override
    public void init(Scope config) {
-      vaultToken = config.get("token");
+      if(System.getenv("VAULT_TOKEN") != null){
+        vaultToken = System.getenv("VAULT_TOKEN");
+      }else{
+        vaultToken = config.get("token");
+      }
       vaultUrl = format(config.get("url"));
       vaultSecretEngineName = config.get("engine-name");
       logger.info("Init Hashicorp: "+ vaultUrl);
