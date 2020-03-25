@@ -44,7 +44,7 @@ public class HashicorpVaultProviderFactory implements VaultProviderFactory {
 
    @Override
    public void init(Scope config) {
-     if(System.getenv("VAULT_TOKEN") != null){
+      if(System.getenv("VAULT_TOKEN") != null){
         vaultToken = System.getenv("VAULT_TOKEN");
       }else{
         vaultToken = config.get("token");
