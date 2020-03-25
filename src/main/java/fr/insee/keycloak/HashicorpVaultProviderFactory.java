@@ -49,7 +49,7 @@ public class HashicorpVaultProviderFactory implements VaultProviderFactory {
       }else{
         vaultToken = config.get("token");
       }
-      vaultUrl = format(config.get("url"));
+      vaultUrl = config.get("url")!=null ? format(config.get("url")) : null;
       vaultSecretEngineName = config.get("engine-name");
       logger.info("Init Hashicorp: "+ vaultUrl);
    }
